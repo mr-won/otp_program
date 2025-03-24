@@ -5,6 +5,7 @@ import base64
 import struct
 import hashlib
 
+// 카운터 기반
 def get_hotp_token(secret, intervals_no, digits=6):
     key = base64.b32decode(secret, True)
     msg = struct.pack(">Q", intervals_no)
@@ -13,6 +14,7 @@ def get_hotp_token(secret, intervals_no, digits=6):
     token = (struct.unpack(">I", h[o:o+4])[0] & 0x7fffffff) % (10**digits)
     return str(token).zfill(digits)
 
+// 시간 기반
 def get_totp_token(secret, time_step=30, digits=6):
     return get_hotp_token(secret, int(time.time() / time_step), digits)
 
